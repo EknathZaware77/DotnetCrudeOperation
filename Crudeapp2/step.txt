@@ -1,0 +1,123 @@
+1)create project 
+
+asp.net  core web API
+
+
+2) Add install swagger package and middeleware in programe.cs 
+<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+
+
+3. add json to string converter---->check
+<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.16" />
+<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.10">
+	<PrivateAssets>all</PrivateAssets>
+	<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+</PackageReference>
+
+
+
+
+
+
+4.add  package to data --->check 
+<PackageReference Include="MySql.Data" Version="8.1.0" />
+<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0" />
+<PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
+
+
+
+5.create model  class
+
+
+
+6.create controller
+
+
+8.Add  connection  string in  dotnet  in application.setting.json
+"ConnectionStrings": {
+  "EmployeeAppCon": "server=localhost; user=root; password=root@123; database=mydb;"
+},
+
+
+7.create DAL
+ to get the data from the databse
+string query = @"
+            select * from 
+            mydb.Department
+";
+
+DataTable table = new DataTable();
+string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon");
+MySqlDataReader myReader;
+using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
+{
+    mycon.Open();
+    using (MySqlCommand myCommand = new MySqlCommand(query, mycon))
+    {
+        myReader = myCommand.ExecuteReader();
+        table.Load(myReader);
+
+        myReader.Close();
+        mycon.Close();
+    }
+}
+
+String result = Newtonsoft.Json.JsonConvert.SerializeObject(table);
+Console.WriteLine(result);
+return result;
+
+ 
+
+
+
+
+8) To insert  the  data in database
+
+ string query = @"
+             insert into mydb.Department (ID,DeptName) values
+             (@DepartmentId,@DepartmentName);
+ ";
+
+ DataTable table = new DataTable();
+ string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon");
+ MySqlCommand myCommand;
+ using (MySqlConnection mycon = new MySqlConnection(sqlDataSource))
+ {
+     mycon.Open();
+     myCommand = new MySqlCommand(query, mycon);
+     myCommand.Parameters.AddWithValue("@DepartmentId", departmentId);
+     myCommand.Parameters.AddWithValue("@DepartmentName", DepartmentName);
+
+     myCommand.ExecuteNonQuery();
+
+     mycon.Close();
+ }
+
+ return new JsonResult("Added Successfully");
+
+
+
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
