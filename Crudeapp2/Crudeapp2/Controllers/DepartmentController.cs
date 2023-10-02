@@ -34,7 +34,8 @@ namespace Crudeapp2.Controllers
 
 
 
-        [HttpGet]
+       /* [HttpGet]*/
+        [HttpGet("route2")]
         public string Get()
         {
             string query = @"
@@ -58,7 +59,8 @@ namespace Crudeapp2.Controllers
                 }
             }
 
-            String result = Newtonsoft.Json.JsonConvert.SerializeObject(table);
+          //  String result = Newtonsoft.Json.JsonConvert.SerializeObject(table);
+            String result = JsonConvert.SerializeObject(table);
             Console.WriteLine(result);
             return result;
            
