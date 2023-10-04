@@ -1,0 +1,70 @@
+ for establishing the connection with mysql :
+
+
+Step1:Install Nutget package 
+         a)Microsoft.EntityFrameworkCore
+         b)Microsoft.EntityFrameworkCore.Tools
+         c)Mysql.EnitityFrameWorkCore
+
+
+Step2:Define the connection String in appsetting.Json file
+      "ConnectionStrings":{
+        "myConn":"server=localhost; user=root; password=root@123; Database=mydb;"
+        }
+
+Step3:create Enitity classes in Model Folder
+       
+
+Step4:create folder Data and in that add MyDbContext and extend by MyDbContext
+
+     public class MyDbContext :Dbcontext
+    {
+       public MyDbContext(DbContextOptions option):base(option){}
+       public Dbset<Model> Models {get;set;}
+
+    }
+
+
+Step5:In program.cs file
+
+     builder.Services.AddDbContext<MyDbContext>(options=>options.UseMySQL(builder.configration.GetConnectionString("myconn")));
+
+
+step6:Migration 
+
+PMC command                                     
+add-migration MigrationName
+remove-migration
+update-database
+script-migration
+
+
+
+Dotnet CLI command
+add Migrationname
+remove
+Update
+script
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
